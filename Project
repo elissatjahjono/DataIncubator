@@ -1,0 +1,35 @@
+## Load libraries
+library(ggplot2)
+
+## Load the dataset
+project_data <- read.csv("alldata.csv")
+project_data_edit <- project_data
+
+
+## 1st plot: What companies are looking for a large number of data scientist?
+str(project_data_edit)
+company_df <- as.data.frame(table(project_data_edit$company))
+company_df_sorted <- company_df[order(company_df$Freq, decreasing = TRUE),]
+top10 <- company_df_sorted[1:10,]
+top10$Freq <- as.numeric(top10$Freq)
+top10$Var1 <- factor(top10$Var1)
+
+par(mar = c(7, 4, 2, 2) + 0.2)
+plot1 <- plot(top10, type = "h", col = "blue", lwd = 10, main = "Companies Looking for Data Scientist", xlab = "Company", ylab = "Number of positions", las = 2)
+
+
+## 2nd plot: 
+location_df <- as.data.frame(project_data_edit$location)
+location_df$`project_data_edit$location` <- as.character(location_df$`project_data_edit$location`)
+location_df$`project_data_edit$location` <- strsplit(location_df$`project_data_edit$location`, ", ")
+mat <- matrix(unlist(location_df), ncol=2, byrow=TRUE)
+df <- as.data.frame(mat)
+colnames(df) <- c("City", "Zip Code")
+city_number <- as.data.frame(table(df$City))
+city_number_sorted <- city_number[order(city_number$Freq, decreasing = TRUE),]
+top10cities <- city_number_sorted[1:10,]
+top10cities$Freq <- as.numeric(top10cities$Freq)
+top10cities$Var1 <- factor(top10cities$Var1)
+
+par(mar = c(7, 4, 2, 2) + 0.2)
+plot2 <- plot(top10cities, type = "h", col = "blue", lwd = 10, main = "Top cities to work as a data scientist", xlab = "City", ylab = "Number of opportunities", las = 2)
